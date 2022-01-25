@@ -5,14 +5,16 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import csv
 
+class CafeForm(FlaskForm):
+    cafe = StringField('Cafe name', validators=[DataRequired()])
+    location = StringField('Cafe Location on Google Maps (URL)', validators=[DataRequired()])
+    opening_time = StringField('Opening Time e.g. 8AM', validators=[DataRequired()])
+    closing_time = StringField('Closing Time e.g. 5:30 PM', validators=[DataRequired()])   
+    submit = SubmitField('Submit')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap(app)
-
-
-class CafeForm(FlaskForm):
-    cafe = StringField('Cafe name', validators=[DataRequired()])
-    submit = SubmitField('Submit')
 
 # Exercise:
 # add: Location URL, open time, closing time, coffee rating, wifi rating, power outlet rating fields
@@ -31,13 +33,13 @@ def home():
 
 @app.route('/add', methods=["GET", "POST"])
 def add_cafe():
-    form = CafeForm()
-    if form.validate_on_submit():
+    cafe_form = CafeForm()
+    if cafe_form.validate_on_submit():
         print("True")
     # Exercise:
     # Make the form write a new row into cafe-data.csv
     # with   if form.validate_on_submit()
-    return render_template('add.html', form=form)
+    return render_template('add.html', form=cafe_form)
 
 
 @app.route('/cafes')
